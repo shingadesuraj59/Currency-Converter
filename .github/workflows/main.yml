@@ -29,7 +29,7 @@ jobs:
       - name: Tag Docker image
         run: docker tag currency-app:latest ${{ secrets.ECR_URI }}:latest
 
-      - name: Push image to Amazon ECR
+      - name: Push image to Amazon ecr
         run: docker push ${{ secrets.ECR_URI }}:latest
 
      
