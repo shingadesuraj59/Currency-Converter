@@ -6,7 +6,7 @@ function InputBox({label,amount,onAmountChange,onCurrencyChange,currencyOptions=
     const ID=useId();
 
     return (
-        <div className={`bg-white p-5 rounded-lg text-sm flex ${className}`}>
+        <div className="bg-white p-5 rounded-lg text-sm flex">
             <div className="w-1/2">
                 <label htmlFor={ID} className="text-black/40 mb-2 inline-block">
                     {label}
@@ -16,7 +16,7 @@ function InputBox({label,amount,onAmountChange,onCurrencyChange,currencyOptions=
                     className="outline-none w-full bg-transparent py-1.5"
                     type="number"
                     placeholder="Amount"
-                    disabled={amountDisable}
+                    // disabled={amountDisable}
                     value={amount}
                     onChange={(e)=> onAmountChange && onAmountChange(Number(e.target.value))}
                 />
