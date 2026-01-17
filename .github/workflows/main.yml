@@ -32,7 +32,7 @@ jobs:
       - name: Push image to Amazon ecr
         run: docker push ${{ secrets.ECR_URI }}:latest
 
-       - name: Download ECS task definition
+      - name: Download ECS task definition
         run: |
           aws ecs describe-task-definition \
             --task-definition ${{ secrets.ECS_TASK_DEFINITION }} \
