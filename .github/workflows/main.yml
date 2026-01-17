@@ -32,4 +32,35 @@ jobs:
       - name: Push image to Amazon ecr
         run: docker push ${{ secrets.ECR_URI }}:latest
 
+       - name: Download ECS task definition
+        run: |
+          aws ecs describe-task-definition \
+            --task-definition ${{ secrets.ECS_TASK_DEFINITION }} \
+            --query taskDefinition \
+            | jq 'del(
+                .taskDefinitionArn,
+                .revision,
+                .status,
+                .requiresAttributes,
+                .compatibilities,
+                .registeredAt,
+                .registeredBy,
+                .enableFaultInjection
+              )' > task-definition.json
+
+      - name: Render new task definition
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        id: render-task
+        with:
+          task-definition: task-definition.json
+          container-name: ${{ secrets.CONTAINER_NAME }}
+          image: ${{ secrets.ECR_URI }}:latest
+
+      - name: Deploy to Amazon ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.render-task.outputs.task-definition }}
+          service: ${{ secrets.ECS_SERVICE }}
+          cluster: ${{ secrets.ECS_CLUSTER }}
+          wait-for-service-stability: true
      
